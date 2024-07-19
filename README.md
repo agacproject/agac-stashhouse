@@ -1,6 +1,4 @@
-# deniz-stashhouse
-Basic stashhouse script.
+# agac-stashhouse
+Bu eklenti, [denizwp](https://github.com/forealdeniz) tarafından yapılmıştır.
 
-Support: discord.gg/denizaight
-
-Preview: https://streamable.com/7yld21
+Video: https://streamable.com/7yld21
