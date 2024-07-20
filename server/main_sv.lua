@@ -1,6 +1,6 @@
 QBCore = exports['qb-core']:GetSharedObject()
 
-QBCore.Functions.CreateCallback('deniz-stashhouse:createStashhouse', function(source, cb, data)
+QBCore.Functions.CreateCallback('agac-stashhouse:createStashhouse', function(source, cb, data)
     if data then
         local newData = data
         exports.ghmattimysql:execute('INSERT INTO stashhouse (`coords`, `data`) VALUES (@coords, @data)',{
@@ -13,21 +13,21 @@ QBCore.Functions.CreateCallback('deniz-stashhouse:createStashhouse', function(so
     end
 end)
 
-QBCore.Functions.CreateCallback('deniz-stashhouse:getStashhouses', function(source, cb)
+QBCore.Functions.CreateCallback('agac-stashhouse:getStashhouses', function(source, cb)
     local all = exports.ghmattimysql:executeSync('SELECT * FROM stashhouse',{
         ['@price'] = 0
     })
     cb(all)
 end)
 
-QBCore.Functions.CreateCallback('deniz-stashhouse:getStashhouse:byId', function(source, cb, data)
+QBCore.Functions.CreateCallback('agac-stashhouse:getStashhouse:byId', function(source, cb, data)
     local housepass = exports.ghmattimysql:executeSync('SELECT data FROM stashhouse WHERE id = @id',{
         ['@id'] = data
     })
     cb(housepass)
 end)
 
-QBCore.Functions.CreateCallback('deniz-stashhouse:buyStash', function(source, cb, pricedata, passdata, id)
+QBCore.Functions.CreateCallback('agac-stashhouse:buyStash', function(source, cb, pricedata, passdata, id)
     local src = source
     local Player = QBCore.Functions.GetPlayer(src)
     --print(pricedata, passdata, id)
@@ -50,16 +50,16 @@ QBCore.Functions.CreateCallback('deniz-stashhouse:buyStash', function(source, cb
     end
 end)
 
-RegisterServerEvent("deniz-stashhouse:newBucket")
-AddEventHandler("deniz-stashhouse:newBucket", function(id)
+RegisterServerEvent("agac-stashhouse:newBucket")
+AddEventHandler("agac-stashhouse:newBucket", function(id)
     local src = source
     --local bucket = math.random(1000, 10000)
     SetPlayerRoutingBucket(src, id)
 end)
 
 
-RegisterServerEvent("deniz-stashhouse:defaultBucket")
-AddEventHandler("deniz-stashhouse:defaultBucket", function()
+RegisterServerEvent("agac-stashhouse:defaultBucket")
+AddEventHandler("agac-stashhouse:defaultBucket", function()
     local src = source
     --local bucket = math.random(1000, 10000)
     SetPlayerRoutingBucket(src, 0)
