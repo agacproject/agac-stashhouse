@@ -12,7 +12,7 @@ RegisterCommand('stashraid', function()
             data = json.decode(data1[1].data)
             if data.sold == true then
                 
-                exports['deniz-powerplant']:OpenMinigame(function(success)
+                exports['deniz-powerplant']:OpenMinigame(function(success) -- change here with ur own minigame script
                     if success then
                         local plyloc = GetEntityCoords(PlayerPedId())
                         currentHouseUp = plyloc
@@ -99,7 +99,7 @@ RegisterCommand('newstash', function(source, args)
             }
         }
         if stashData.data.price ~= nil then
-            QBCore.Functions.TriggerCallback('deniz-stashhouse:createStashhouse', function(result)
+            QBCore.Functions.TriggerCallback('agac-stashhouse:createStashhouse', function(result)
                 if result then
                     QBCore.Functions.Notify('Stashhouse oluşturuldu.', 'success')
                 else
@@ -112,7 +112,7 @@ end)
 
 function getAllStashhouses()
     local callback = promise:new()
-    QBCore.Functions.TriggerCallback('deniz-stashhouse:getStashhouses', function(result)
+    QBCore.Functions.TriggerCallback('agac-stashhouse:getStashhouses', function(result)
         callback:resolve(result)
     end)
     return Citizen.Await(callback)
@@ -136,7 +136,7 @@ exports("GetClosestStash", GetClosestStash)
 
 function GetDataByStashId(stashid)
     local callback = promise:new()
-    QBCore.Functions.TriggerCallback('deniz-stashhouse:getStashhouse:byId', function(result)
+    QBCore.Functions.TriggerCallback('agac-stashhouse:getStashhouse:byId', function(result)
         callback:resolve(result)
     end, stashid)
     return Citizen.Await(callback)
@@ -148,7 +148,7 @@ RegisterNetEvent('deniz-stashhouse:in', function()
         data1 = GetDataByStashId(closestStash)
         data = json.decode(data1[1].data)
         if data.sold == true then
-            exports['deniz-keypad']:PasswordInput(tonumber(data.password), function(result)
+            exports['agac-keypad']:PasswordInput(tonumber(data.password), function(result)
                 --print(result.status, result.given, data.password)
                 if result.status == true and result.given ~= nil and tonumber(data.password) ~= nil and tonumber(result.given) == tonumber(data.password) then
                     local plyloc = GetEntityCoords(PlayerPedId())
@@ -187,7 +187,7 @@ RegisterNetEvent('deniz-stashhouse:in', function()
                     txt = "$"..data.price.." | Numara: "..closestStash,
                     icon = 'fas fa-warehouse',
                     params = {
-                        event = "deniz-stashhouse:buyst",
+                        event = "agac-stashhouse:buyst",
                         args = {
                             id = closestStash,
                             price = data.price
@@ -199,13 +199,13 @@ RegisterNetEvent('deniz-stashhouse:in', function()
     end
 end)
 
-RegisterNetEvent('deniz-stashhouse:buyst', function(data)
+RegisterNetEvent('agac-stashhouse:buyst', function(data)
     local id, price = data.id, data.price
-    exports['deniz-keypad']:PasswordInput('setpass', function(status)
+    exports['agac-keypad']:PasswordInput('setpass', function(status)
         --print(status.status, status.given)
         if status.status == true and status.given ~= nil then
             --print(status.status, status.given)
-            QBCore.Functions.TriggerCallback('deniz-stashhouse:buyStash', function(result)
+            QBCore.Functions.TriggerCallback('agac-stashhouse:buyStash', function(result)
                 --print(result)
                 if result == true then
                     QBCore.Functions.Notify('Stashhouse satın alındı.', 'success')
@@ -221,7 +221,7 @@ local building = nil
 
 function buildBasicHouse(generator, id)
     currentHouseIn = {generator, id}
-    TriggerServerEvent('deniz-stashhouse:newBucket', id)
+    TriggerServerEvent('agac-stashhouse:newBucket', id)
     DoScreenFadeOut(100)
     Citizen.Wait(3000)
     FreezeEntityPosition(PlayerPedId(), true)
@@ -234,14 +234,14 @@ function buildBasicHouse(generator, id)
     FreezeEntityPosition(PlayerPedId(),false)
 end
 
-RegisterNetEvent('deniz-stashhouse:out', function()
+RegisterNetEvent('agac-stashhouse:out', function()
     if inhouse == true then 
         inhouse = false
         DoScreenFadeOut(100)
         Citizen.Wait(200)
         DeleteObject(building)
         Citizen.Wait(800)
-        TriggerServerEvent('deniz-stashhouse:defaultBucket')
+        TriggerServerEvent('agac-stashhouse:defaultBucket')
         SetEntityCoords(PlayerPedId(), currentHouseUp.x, currentHouseUp.y, currentHouseUp.z-1)
         Citizen.Wait(2000)
         DoScreenFadeIn(100)
